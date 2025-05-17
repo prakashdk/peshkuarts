@@ -1,5 +1,4 @@
-import { useState, useRef } from "react";
-import { MdOutlineFullscreen } from "react-icons/md";
+import { useRef, useState } from "react";
 
 interface MagnifierProps {
   src: string;

@@ -9,7 +9,7 @@ export default function Navbar() {
   const user = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const [cartCount, setCartCount] = useState(0);
+  const [cartCount] = useState(0);
 
   const toggleMenu = () => setMenuOpen((open) => !open);
 

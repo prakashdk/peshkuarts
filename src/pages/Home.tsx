@@ -7,8 +7,10 @@ import toast, { Toaster } from "react-hot-toast";
 interface Product {
   id: string;
   title: string;
-  image_url: string;
+  thumbnail_url: string;
+  image_urls: string[];
   price: number;
+  mrp: number;
 }
 
 export default function Home() {
@@ -61,7 +63,7 @@ export default function Home() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {[...products, ...products, ...products].map((product) => (
+          {products.map((product) => (
             <ProductCard key={product.id} {...product} />
           ))}
         </div>

@@ -7,9 +7,11 @@ import ProductGallery from "../layout/ProductGallery";
 export default function ProductPage() {
   const { id } = useParams();
   const [product, setProduct] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
+      setLoading(true);
       const { data, error } = await supabase
         .from("products")
         .select("*")
@@ -17,13 +19,44 @@ export default function ProductPage() {
         .single();
       if (error) console.error(error);
       else setProduct(data);
+      setLoading(false);
     };
 
     fetchProduct();
   }, [id]);
 
-  if (!product)
-    return <p className="text-center p-6 text-gray-500">Loading product...</p>;
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-gray-500">
+        <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-base">Fetching product details...</p>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-gray-400">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-10 w-10 mb-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9.75 9.75h.008v.008H9.75V9.75zM14.25 9.75h.008v.008h-.008V9.75zM9 16.5h6M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"
+          />
+        </svg>
+        <p className="text-center text-sm italic">
+          Oops! This product doesn't seem to exist.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">

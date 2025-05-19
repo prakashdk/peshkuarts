@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "../config/supabaseClient";
-import { FaShoppingCart, FaBolt } from "react-icons/fa";
+import AddToCartButton from "../layout/AddToCard";
+import BuyNowButton from "../layout/BuyNow";
+import PosterDetails from "../layout/PosterDetails";
 import ProductGallery from "../layout/ProductGallery";
+import { FaMinus, FaPlus } from "react-icons/fa";
 
 export default function ProductPage() {
   const { id } = useParams();
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -59,62 +63,76 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-      {/* Left: Product Image */}
-      <ProductGallery product={product} />
+    <>
+      <div className="p-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+        {/* Left: Product Image */}
+        <ProductGallery product={product} />
 
-      {/* Right: Product Details */}
-      <div className="flex flex-col justify-between">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
-          <div className="flex items-center gap-4 mb-4">
-            <>
-              <p className="text-lg text-gray-500 line-through">
-                ₹{product.mrp}
-              </p>
-              <p className="text-2xl font-bold text-indigo-600">
-                ₹{product.price}
-              </p>
-              {product.price < product.mrp && (
-                <span className="bg-green-100 text-green-700 text-sm font-medium px-2 py-0.5 rounded">
-                  {Math.round(
-                    ((product.mrp - product.price) / product.mrp) * 100
-                  )}
-                  % off
+        {/* Right: Product Details */}
+        <div className="flex flex-col justify-between">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
+            <div className="flex-col items-center gap-4 mb-4 space-y-2">
+              <>
+                <p className="text-lg text-gray-500 line-through">
+                  ₹{product.mrp}.00
+                </p>
+                <div className="flex items-center gap-4 mb-4">
+                  <p className="text-2xl font-bold text-indigo-600">
+                    ₹{product.price}.00
+                  </p>
+                  <div>
+                    {product.price < product.mrp && (
+                      <span className="bg-green-100 text-green-700 text-sm font-medium px-2 py-0.5 rounded">
+                        {Math.round(
+                          ((product.mrp - product.price) / product.mrp) * 100
+                        )}
+                        % off
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </>
+            </div>
+
+            {/* Additional user input fields */}
+            <div className="flex items-center justify-start gap-4 px-5 py-4">
+              <label className="text-gray-700 font-medium">Quantity:</label>
+
+              <div className="flex items-center border rounded-md overflow-hidden select-none shadow-sm">
+                <button
+                  onClick={() => setQuantity((q) => (q > 1 ? q - 1 : q))}
+                  className="px-2 py-2 text-indigo-600 hover:bg-indigo-50 rounded-full transition"
+                  aria-label={`Decrease quantity of ${product.title}`}
+                >
+                  <FaMinus />
+                </button>
+
+                <span className="px-4 py-2 text-gray-800 font-semibold min-w-[2rem] text-center">
+                  {quantity}
                 </span>
-              )}
-            </>
+
+                <button
+                  onClick={() => setQuantity((q) => q + 1)}
+                  className="px-2 py-2 text-indigo-600 hover:bg-indigo-50 rounded-full transition"
+                  aria-label={`Increase quantity of ${product.title}`}
+                >
+                  <FaPlus />
+                </button>
+              </div>
+            </div>
           </div>
 
-          <p className="text-gray-700 leading-relaxed mb-6">
-            {product.description || "No description available."}
-          </p>
-
-          {/* Dummy specs section */}
-          <div className="mb-6 space-y-2">
-            <h3 className="font-semibold text-lg mb-2 text-gray-800">
-              Highlights
-            </h3>
-            <ul className="list-disc list-inside text-gray-600 text-sm">
-              <li>High-quality print and finish</li>
-              <li>Safe packaging & delivery</li>
-              <li>Available in multiple sizes (on request)</li>
-            </ul>
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <AddToCartButton productId={product.id} />
+            <BuyNowButton items={[{ productId: product.id, quantity }]} />
           </div>
-        </div>
-
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <button className="flex-1 flex items-center justify-center gap-2 bg-primary text-secondary py-3 rounded hover:bg-indigo-700 transition">
-            <FaShoppingCart />
-            Add to Cart
-          </button>
-          <button className="flex-1 flex items-center justify-center gap-2 bg-primary text-secondary py-3 rounded hover:bg-orange-600 transition">
-            <FaBolt />
-            Buy Now
-          </button>
         </div>
       </div>
-    </div>
+      <div>
+        <PosterDetails descriptionHTML={product.description} />
+      </div>
+    </>
   );
 }

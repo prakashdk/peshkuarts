@@ -15,9 +15,12 @@ export default function Magnifier({
 }: MagnifierProps) {
   const [showMagnifier, setShowMagnifier] = useState(false);
   const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0 });
+  const [imgLoaded, setImgLoaded] = useState(false); // track loading
   const imgRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!imgLoaded) return; // don't do anything if image isn't ready
+
     const { left, top, width, height } =
       imgRef.current!.getBoundingClientRect();
 
@@ -36,7 +39,7 @@ export default function Magnifier({
       ref={imgRef}
       style={{ width, height }}
       className="relative cursor-crosshair"
-      onMouseEnter={() => setShowMagnifier(true)}
+      onMouseEnter={() => imgLoaded && setShowMagnifier(true)}
       onMouseLeave={() => setShowMagnifier(false)}
       onMouseMove={handleMouseMove}
     >
@@ -46,25 +49,22 @@ export default function Magnifier({
         style={{ width, height, objectFit: "contain" }}
         className="block"
         draggable={false}
+        crossOrigin="anonymous"
+        onLoad={() => setImgLoaded(true)} // set loaded here
       />
 
       {showMagnifier && (
         <div
           className="pointer-events-none absolute border border-gray-300 rounded"
           style={{
-            // size of magnifier lens
             width: 150,
             height: 150,
             top: magnifierPos.y - 75,
             left: magnifierPos.x - 75,
             backgroundColor: "white",
             backgroundRepeat: "no-repeat",
-
-            // background image zoomed
             backgroundImage: `url(${src})`,
             backgroundSize: `${width * zoom}px ${height * zoom}px`,
-
-            // background position moves opposite to cursor, multiplied by zoom
             backgroundPositionX: `-${magnifierPos.x * zoom - 75}px`,
             backgroundPositionY: `-${magnifierPos.y * zoom - 75}px`,
           }}

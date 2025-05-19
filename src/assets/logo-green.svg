@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="4.1805367in"
+   height="1.6854643in"
+   viewBox="0 0 106.18563 42.810792"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.9077152"
+     inkscape:cx="316.60911"
+     inkscape:cy="846.82453"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g3-7" />
+  <defs
+     id="defs1">
+    <font
+       horiz-adv-x="1000"
+       id="font7"
+       inkscape:label="font 1"
+       horiz-origin-x="0"
+       horiz-origin-y="0"
+       vert-origin-x="512"
+       vert-origin-y="768"
+       vert-adv-y="1024">
+      <font-face
+         units-per-em="1000"
+         ascent="750"
+         cap-height="600"
+         x-height="400"
+         descent="200"
+         id="font-face7"
+         font-family="SVGFont 1" />
+      <missing-glyph
+         d="M0,0h1000v1000h-1000z"
+         id="missing-glyph7" />
+    </font>
+    <rect
+       x="167.58337"
+       y="316.38586"
+       width="468.07767"
+       height="78.012939"
+       id="rect1-51-2-2-6-7" />
+    <rect
+       x="167.58337"
+       y="316.38586"
+       width="468.07767"
+       height="78.012939"
+       id="rect1-51-2-6-9-7-1" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-142.28966,-247.37521)">
+    <ellipse
+       style="fill:#375e55;fill-opacity:1;stroke-width:0.293276"
+       id="path3-1-6-0"
+       cx="227.3625"
+       cy="268.78061"
+       rx="21.112783"
+       ry="21.405405" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,67.421548,175.74372)"
+       id="text1-3-6-4-7-8"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;font-family:Elephant;-inkscape-font-specification:Elephant;text-align:center;white-space:pre;shape-inside:url(#rect1-51-2-2-6-7);display:inline;fill:#303038"
+       x="-144.46875"
+       y="0"><tspan
+         x="281.43005"
+         y="374.56439"
+         id="tspan1">Peshku </tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,121.78579,175.73078)"
+       id="text1-3-6-2-0-3-4"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;font-family:Elephant;-inkscape-font-specification:Elephant;text-align:center;white-space:pre;shape-inside:url(#rect1-51-2-6-9-7-1);display:inline;fill:#ebeade;fill-opacity:0.921569"
+       x="-144.46875"
+       y="0"><tspan
+         x="332.91815"
+         y="374.56439"
+         id="tspan2">Arts</tspan></text>
+  </g>
+</svg>

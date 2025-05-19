@@ -1,5 +1,6 @@
-import { FaBolt, FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import AddToCartButton from "./AddToCard";
+import BuyNow from "./BuyNow";
 
 interface ProductProps {
   id: string;
@@ -28,25 +29,9 @@ export default function ProductCard({
       </Link>
 
       <div className="flex gap-3">
-        <button
-          className="flex-grow flex items-center justify-center gap-2 bg-primary text-secondary py-2 rounded hover:bg-indigo-700 transition"
-          onClick={() => {
-            alert(`Added "${title}" to cart`);
-          }}
-        >
-          <FaShoppingCart />
-          Add to Cart
-        </button>
+        <AddToCartButton productId={id} />
 
-        <button
-          className="flex-grow flex items-center justify-center gap-2 bg-primary text-secondary py-2 rounded hover:bg-green-700 transition"
-          onClick={() => {
-            alert(`Buying "${title}" now`);
-          }}
-        >
-          <FaBolt />
-          Buy Now
-        </button>
+        <BuyNow items={[{ productId: id, quantity: 1 }]} />
       </div>
     </div>
   );

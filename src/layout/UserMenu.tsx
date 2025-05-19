@@ -6,7 +6,7 @@ import { supabase } from "../config/supabaseClient";
 import { useUser } from "../hooks/useUser";
 
 export default function UserMenu() {
-  const {user} = useUser();
+  const { user } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -61,6 +61,13 @@ export default function UserMenu() {
             className="block px-4 py-2 hover:bg-indigo-100"
           >
             View Profile
+          </Link>
+          <Link
+            to="/orders"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-2 hover:bg-indigo-100"
+          >
+            Orders
           </Link>
           <button
             onClick={handleLogout}

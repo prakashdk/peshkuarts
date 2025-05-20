@@ -66,11 +66,6 @@ const CheckoutConfirm = ({
     loadOrderItems();
   }, []);
 
-  const total = cartItems.reduce(
-    (sum, { product, quantity }) => sum + product.price * quantity,
-    0
-  );
-
   // Format price with commas
   const formatPrice = (amount: number) =>
     amount.toLocaleString("en-IN", {
@@ -80,6 +75,11 @@ const CheckoutConfirm = ({
     });
 
   const itemsToShow = orderItems.length === 0 ? cartItems : orderItems;
+
+  const total = itemsToShow.reduce(
+    (sum, { product, quantity }) => sum + product.price * quantity,
+    0
+  );
 
   if (loading) {
     return <Loader>Loading your orders...</Loader>;

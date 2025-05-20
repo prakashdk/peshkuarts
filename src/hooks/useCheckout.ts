@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../config/supabaseClient"; // adjust as needed
+import toast from "react-hot-toast";
 
 export type OrderItem = {
   productId: string;
@@ -50,36 +51,88 @@ export function useCheckout() {
   }: {
     user_id: string;
     address_id: string;
-    items: OrderItem[];
+    items: OrderItem[]; // item.productId and item.quantity
   }): Promise<{ success: boolean; orderId?: string }> => {
+    const loadingToast = toast.loading("Placing your order...");
+
     try {
-      // Insert the order record
+      // Step 1: Fetch product details to lock name & price
+      const productIds = items.map((item) => item.productId);
+      const { data: products, error: productsError } = await supabase
+        .from("products")
+        .select("id, title, price")
+        .in("id", productIds);
+
+      if (productsError || !products || products.length !== items.length) {
+        toast.error("Failed to fetch product details");
+        toast.dismiss(loadingToast);
+        return { success: false };
+      }
+
+      // Step 2: Map items to include price & name
+      const orderItems = items.map((item) => {
+        const product = products.find((p) => p.id === item.productId);
+        if (!product) {
+          toast.error(`Product not found: ${item.productId}`);
+          throw new Error(); // local-only to short-circuit
+        }
+
+        return {
+          order_id: "", // placeholder
+          product_id: product.id,
+          product_title: product.title,
+          unit_price: product.price,
+          quantity: item.quantity,
+        };
+      });
+
+      // Step 3: Calculate total amount
+      const totalAmount = orderItems.reduce((sum, item) => {
+        return sum + item.unit_price * item.quantity;
+      }, 0);
+
+      // Step 4: Insert order
       const { data: order, error: orderError } = await supabase
         .from("orders")
         .insert({
           user_id,
           address_id,
+          total_amount: totalAmount,
+          currency: "INR",
+          status: "pending",
         })
-        .select("id") // assuming your order id is UUID
+        .select("id")
         .single();
 
-      if (orderError || !order?.id) throw new Error("Failed to create order");
+      if (orderError || !order?.id) {
+        toast.error("Failed to place order");
+        toast.dismiss(loadingToast);
+        return { success: false };
+      }
 
-      const orderItems = items.map((item) => ({
+      // Step 5: Insert order items
+      const orderItemsWithOrderId = orderItems.map((item) => ({
+        ...item,
         order_id: order.id,
-        product_id: item.productId,
-        quantity: item.quantity,
       }));
 
       const { error: itemsError } = await supabase
         .from("order_items")
-        .insert(orderItems);
+        .insert(orderItemsWithOrderId);
 
-      if (itemsError) throw new Error("Failed to insert order items");
+      if (itemsError) {
+        toast.error("Failed to add items to order");
+        toast.dismiss(loadingToast);
+        return { success: false };
+      }
 
+      toast.success("Order placed successfully!");
+      toast.dismiss(loadingToast);
       return { success: true, orderId: order.id };
     } catch (err) {
-      console.error("Supabase order failed", err);
+      console.error("Order error:", err);
+      toast.error("Something went wrong while placing the order");
+      toast.dismiss(loadingToast);
       return { success: false };
     }
   };

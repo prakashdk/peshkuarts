@@ -6,6 +6,9 @@ import BuyNowButton from "../layout/BuyNow";
 import PosterDetails from "../layout/PosterDetails";
 import ProductGallery from "../layout/ProductGallery";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import ProductRating from "../layout/ProductRating";
+import ProductReviews from "../layout/ProductReview";
+import ReturnPolicyNote from "../layout/ReturnPolicyNote";
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -72,6 +75,7 @@ export default function ProductPage() {
         <div className="flex flex-col justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
+            <ProductRating productId={product.id} />
             <div className="flex-col items-center gap-4 mb-4 space-y-2">
               <>
                 <p className="text-lg text-gray-500 line-through">
@@ -121,17 +125,31 @@ export default function ProductPage() {
                 </button>
               </div>
             </div>
+              <div>
+                <ReturnPolicyNote />
+              </div>
           </div>
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
-            <AddToCartButton productId={product.id} />
+            <AddToCartButton productId={product.id} quantity={quantity} />
             <BuyNowButton items={[{ productId: product.id, quantity }]} />
           </div>
         </div>
       </div>
       <div>
         <PosterDetails descriptionHTML={product.description} />
+      </div>
+      <div className="mt-10">
+        <div className="flex items-center gap-4 mb-6">
+          <hr className="flex-grow border-gray-300" />
+          <span className="text-sm italic text-gray-500 whitespace-nowrap">
+            Reviews
+          </span>
+          <hr className="flex-grow border-gray-300" />
+        </div>
+
+        <ProductReviews productId={product.id} />
       </div>
     </>
   );

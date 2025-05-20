@@ -1,21 +1,21 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { SiPhonepe } from "react-icons/si";
 
 type Props = {
   loading: boolean;
   onBack: () => void;
-  onPlaceOrder: () => void;
+  onPlaceOrder: () => Promise<void>;
 };
 
-const CheckoutPayment = ({ loading, onBack }: Props) => {
+const CheckoutPayment = ({ loading, onBack, onPlaceOrder }: Props) => {
   const [phonePeLoading, setPhonePeLoading] = useState(false);
 
-  const handlePhonePePayment = () => {
+  const handlePhonePePayment = async () => {
     setPhonePeLoading(true);
-    setTimeout(() => {
-      alert("No backend implemented yet for PhonePe payment!");
-      setPhonePeLoading(false);
-    }, 1000);
+    await onPlaceOrder();
+    setPhonePeLoading(false);
+    toast.error("Not yet for PhonePe payment!");
   };
 
   return (

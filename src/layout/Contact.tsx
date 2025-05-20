@@ -1,8 +1,8 @@
 import {
   FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
   FaInstagram,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
 } from "react-icons/fa";
 
 const ContactPage = () => {
@@ -24,7 +24,7 @@ const ContactPage = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <FaPhone className="text-indigo-600 text-lg" />
+              <FaPhoneAlt className="text-indigo-600 text-lg" />
               <span>+91 98765 43210</span>
             </div>
 

@@ -10,11 +10,27 @@ import ContactPage from "./layout/Contact";
 import ReturnPolicy from "./layout/ReturnPolicy";
 import Orders from "./layout/Orders";
 import UserProfile from "./layout/UserProfile";
+import { useEffect } from "react";
+import { useUser } from "./hooks/useUser";
+import { useCart } from "./hooks/useCart";
+import OrderDetails from "./layout/OrderDetails";
 
 function App() {
   const location = useLocation();
   const hideNavbarOn = ["/login", "/signup"];
   const shouldShowNavbar = !hideNavbarOn.includes(location.pathname);
+
+  const fetchUser = useUser((s) => s.fetchUser);
+  const fetchCart = useCart((s) => s.fetchCart);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchUser();
+      await fetchCart();
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -30,6 +46,7 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/return-policy" element={<ReturnPolicy />} />
         <Route path="/account" element={<UserProfile />} />
+        <Route path="/orders/:orderId" element={<OrderDetails />} />
       </Routes>
     </>
   );

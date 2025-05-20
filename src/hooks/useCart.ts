@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { create } from "zustand";
 import { supabase } from "../config/supabaseClient";
 import { useUser } from "./useUser";
 
@@ -13,19 +13,25 @@ export type CartItem = {
   quantity: number;
 };
 
-export function useCart() {
-  const { user } = useUser();
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(true);
+type CartState = {
+  cartItems: CartItem[];
+  loading: boolean;
+  fetchCart: () => Promise<void>;
+  removeFromCart: (cartId: string) => Promise<void>;
+  updateQuantity: (cartId: string, quantity: number) => Promise<void>;
+  clearCart: () => Promise<void>;
+};
 
-  // Fetch cart items on mount or user change
-  useEffect(() => {
-    if (user) fetchCart();
-    else setCartItems([]);
-  }, [user]);
+export const useCart = create<CartState>((set, get) => ({
+  cartItems: [],
+  loading: false,
 
-  const fetchCart = async () => {
-    setLoading(true);
+  fetchCart: async () => {
+    const user = useUser.getState().user;
+    if (!user) return set({ cartItems: [], loading: false });
+
+    set({ loading: true });
+
     const { data, error } = await supabase
       .from("cart")
       .select(
@@ -39,36 +45,31 @@ export function useCart() {
         quantity: item.quantity,
         product: item.product,
       }));
-      setCartItems(items);
+      set({ cartItems: items, loading: false });
+    } else {
+      set({ cartItems: [], loading: false });
     }
-    setLoading(false);
-  };
+  },
 
-  const removeFromCart = async (cartId: string) => {
+  removeFromCart: async (cartId: string) => {
     await supabase.from("cart").delete().eq("id", cartId);
-    fetchCart();
-  };
+    await get().fetchCart();
+  },
 
-  const updateQuantity = async (cartId: string, quantity: number) => {
+  updateQuantity: async (cartId: string, quantity: number) => {
     if (quantity <= 0) {
-      await removeFromCart(cartId);
+      await get().removeFromCart(cartId);
     } else {
       await supabase.from("cart").update({ quantity }).eq("id", cartId);
-      fetchCart();
+      await get().fetchCart();
     }
-  };
+  },
 
-  const clearCart = async () => {
+  clearCart: async () => {
+    const user = useUser.getState().user;
+    if (!user) return;
+
     await supabase.from("cart").delete().eq("user_id", user.id);
-    setCartItems([]);
-  };
-
-  return {
-    cartItems,
-    loading,
-    fetchCart,
-    removeFromCart,
-    updateQuantity,
-    clearCart,
-  };
-}
+    set({ cartItems: [] });
+  },
+}));

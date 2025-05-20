@@ -44,7 +44,7 @@ const CheckoutBase = () => {
 
     setLoading(false);
 
-    if (res.success) {
+    if (res?.success) {
       navigate(`/orders/${res.orderId}`);
     } else {
       toast.error("Order failed. Try again.");

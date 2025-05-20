@@ -6,11 +6,15 @@ import { useUser } from "../hooks/useUser";
 
 interface AddToCartButtonProps {
   productId: string;
+  quantity?: number;
 }
 
-export default function AddToCartButton({ productId }: AddToCartButtonProps) {
+export default function AddToCartButton({
+  productId,
+  quantity = 1,
+}: AddToCartButtonProps) {
   const [loading, setLoading] = useState(false);
-  const {user} = useUser();
+  const { user } = useUser();
   const { fetchCart } = useCart();
 
   const addToCart = async (productId: string) => {
@@ -27,12 +31,12 @@ export default function AddToCartButton({ productId }: AddToCartButtonProps) {
     if (existing) {
       await supabase
         .from("cart")
-        .update({ quantity: existing.quantity + 1 })
+        .update({ quantity: existing.quantity + quantity })
         .eq("id", existing.id);
     } else {
       await supabase
         .from("cart")
-        .insert({ user_id: user.id, product_id: productId, quantity: 1 });
+        .insert({ user_id: user.id, product_id: productId, quantity });
     }
     setLoading(false);
     fetchCart();

@@ -15,6 +15,7 @@ export default function ProductCard({
   title,
   thumbnail_url,
   price,
+  mrp,
 }: ProductProps) {
   return (
     <div className="border rounded shadow hover:shadow-lg p-4 flex flex-col">
@@ -25,7 +26,14 @@ export default function ProductCard({
           className="w-full h-80 object-cover rounded mb-2"
         />
         <h3 className="text-lg font-semibold">{title}</h3>
-        <p className="text-gray-500 mb-4">₹{price}</p>
+        <div className="mb-4 flex items-baseline gap-3">
+          <p className="text-gray-400 line-through text-sm">
+            ₹{mrp.toFixed(2)}
+          </p>
+          <p className="text-lg font-semibold text-gray-800">
+            ₹{price.toFixed(2)}
+          </p>
+        </div>
       </Link>
 
       <div className="flex gap-3">

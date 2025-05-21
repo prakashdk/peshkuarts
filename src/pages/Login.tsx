@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,12 +12,13 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user, signInWithPassword } = useUser();
 
   const handleLoginOrSignup = async () => {
     setLoading(true);
     try {
       // Try to login first
-      const { error: loginError } = await supabase.auth.signInWithPassword({
+      const { error: loginError } = await signInWithPassword({
         email,
         password,
       });
@@ -60,11 +62,9 @@ export default function Login() {
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        navigate("/"); // redirect to dashboard or home if already logged in
-      }
-    });
+    if (user?.id) {
+      navigate("/");
+    }
   }, []);
 
   return (

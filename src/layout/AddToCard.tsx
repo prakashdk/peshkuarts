@@ -3,6 +3,8 @@ import { FaShoppingCart } from "react-icons/fa";
 import { supabase } from "../config/supabaseClient";
 import { useCart } from "../hooks/useCart";
 import { useUser } from "../hooks/useUser";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface AddToCartButtonProps {
   productId: string;
@@ -16,9 +18,14 @@ export default function AddToCartButton({
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
   const { fetchCart } = useCart();
+  const navigate = useNavigate();
 
   const addToCart = async (productId: string) => {
-    if (!user) return;
+    if (!user) {
+      toast.error(`Login to use cart`);
+      navigate(`/login`);
+      return;
+    }
 
     setLoading(true);
     const { data: existing } = await supabase

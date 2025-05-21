@@ -1,19 +1,18 @@
-import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
-import { supabase } from "../config/supabaseClient";
+import { Link } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 
 export default function UserMenu() {
-  const { user } = useUser();
+  const { user, signOut } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => setMenuOpen((open) => !open);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOut()
     setMenuOpen(false);
   };
 
